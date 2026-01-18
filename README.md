@@ -19,7 +19,7 @@ Between each Picard iteration the power distribution is relaxed in order to avoi
 The relaxation is
 
 $$
-q^{''}_{n+1}=(1-\alpha)*q^{''}_{n} + \alpha*q^{''}_{n+1}^*
+q^{''}_{n+1}=(1-\alpha)*q^{''}_{n} + \alpha*q^{''}_{n+1}
 $$
 
 where $\alpha$ is the relaxation factor.

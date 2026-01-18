@@ -1,0 +1,101 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+T
+{
+	internalField   uniform 600;
+
+	boundaryField
+	{
+		zmax
+		{
+			type	zeroGradient;
+		}
+
+		zmin
+		{
+			type	zeroGradient;
+		}
+		
+		cladding_to_fuel
+		{
+		    type            compressible::turbulentTemperatureCoupledBaffleMixed;
+            Tnbr            T;
+            kappaMethod     solidThermo;
+            value           $internalField;
+		}
+		
+		cladding_to_coolant
+		{
+		    type            compressible::turbulentTemperatureCoupledBaffleMixed;
+            Tnbr            T;
+            kappaMethod     solidThermo;
+            value           $internalField;
+		}
+		
+		cladding_to_guide
+		{
+		    type	zeroGradient;
+			value	$internalField;
+		}
+
+	}
+
+}
+
+
+p
+{
+	internalField   uniform 1e5;
+
+	boundaryField
+	{
+		zmax
+		{
+			
+		    type	fixedFluxPressure;
+			value	$internalField;
+	
+		}
+
+		zmin
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+		
+		cladding_to_fuel
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+		cladding_to_coolant
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+		cladding_to_guide
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+	}
+
+}
+
+
+// ************************************************************************* //

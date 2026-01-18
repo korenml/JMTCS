@@ -1,0 +1,15 @@
+set terminal wxt enhanced
+set logscale y
+set title "Serpent residual"
+set ylabel 'K-eff std'
+set xlabel 'Active cycle'
+
+set grid
+
+plot x notitle with line linecolor rgb"#ffffff",\
+"< cat log.serpent | grep 'k-eff (implicit)' | cut -d' ' -f7 " title 'k-eff std' with lines
+
+replot
+pause 1
+reread
+

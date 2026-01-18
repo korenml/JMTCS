@@ -1,0 +1,113 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/fuel";
+    object      fvOptions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+/*
+powerSource
+{
+	type            volPowerSource;
+	selectionMode   all;
+}
+
+energySource
+{
+    type            scalarSemiImplicitSource;
+    active          true;
+    duration	    100000;
+    selectionMode   all;
+    volumeMode      absolute;//specific;//
+    injectionRateSuSp
+    {
+            h           (21.656e6 0); //   q in [W]; or in [W/m³] if you use specific mode
+    }
+}
+*/
+codedSource
+{
+    type            scalarCodedSource;
+    active			true;
+	name            sourceTime;
+    scalarCodedSourceCoeffs
+    {
+    	fields          (h);
+    	
+	    selectionMode   all;
+
+    codeInclude
+	#{
+
+	#};
+
+	codeCorrect
+	#{
+		//Pout<< "**codeCorrect**" << endl;
+		
+	#};
+
+    codeAddSup//Rho
+    #{
+ 	    const Time& time = mesh().time();
+        const scalarField& V = mesh_.V();
+        scalarField& heSource = eqn.source();
+		//const volScalarField& volPower = mesh_.lookupObject<volScalarField>("volPower");
+
+
+		const volScalarField volPower
+		(  
+             IOobject  
+             (  
+                 "volPower",  
+                 time.constant(),  
+                 mesh_,  
+                 IOobject::MUST_READ,  
+                 IOobject::AUTO_WRITE  
+             ),  
+             mesh_  
+        );
+
+        //heSource -= volPower*V;
+        
+        forAll(cells_, i)
+        {
+        	label celli = cells_[i];
+        	heSource[celli] -= volPower[celli]*V[celli];
+        }
+
+    #};
+    
+	codeConstrain
+	#{
+		//Pout<< "**codeConstrain**" << endl;
+		/*
+		const volScalarField volPower
+		(  
+             IOobject  
+             (  
+                 "volPower",  
+                 runTime.timeName(),  
+                 mesh_,  
+                 IOobject::MUST_READ,  
+                 IOobject::AUTO_WRITE  
+             ),  
+             mesh_  
+        );
+*/
+	#};
+	};
+}
+
+
+// ************************************************************************* //

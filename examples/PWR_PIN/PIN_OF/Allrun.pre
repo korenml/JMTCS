@@ -1,0 +1,31 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+
+
+runApplication -s fuel gmshToFoam -region fuel pin_fuel.msh
+runApplication -s cladding gmshToFoam -region cladding pin_cladding.msh
+runApplication -s coolant gmshToFoam -region coolant pin_coolant.msh
+sed -i 's/fuel_to_cladding/fuel_to_cladding_/' constant/fuel/polyMesh/boundary
+sed -i 's/cladding_to_fuel/cladding_to_fuel_/' constant/cladding/polyMesh/boundary
+sed -i 's/cladding_to_coolant/cladding_to_coolant_/' constant/cladding/polyMesh/boundary
+sed -i 's/coolant_to_cladding/coolant_to_cladding_/' constant/coolant/polyMesh/boundary
+runApplication -s fuel createPatch -region fuel -overwrite
+runApplication -s cladding createPatch -region cladding -overwrite
+runApplication -s coolant createPatch -region coolant -overwrite
+
+
+runApplication renumberMesh -allRegions -overwrite
+cp -r 0.orig 0
+
+runApplication -s fuel changeDictionary -region fuel
+runApplication -s cladding changeDictionary -region cladding
+runApplication -s coolant changeDictionary -region coolant
+
+
+
+
+
+#------------------------------------------------------------------------------

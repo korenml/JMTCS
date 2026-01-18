@@ -1,0 +1,11 @@
+N_LOOPS=2
+N_PROCS=4
+N_INIT_NEUTRONS=1000
+OPENFOAM_ITERATIONS=200
+OPENFOAM_FOLDER="PIN_OF"
+SERPENT_INPUT="input"
+SERPENT="/home/tomas/Serpent_2/Serpent_2.1.32/sss2"
+OPENFOAM_SOURCE="/lib/openfoam/openfoam2106/etc/bashrc"
+FUEL_OPENFOAM=("fuel")
+FUEL_IFC=("fuel.ifc")
+COOLANT_IFC=("water.ifc")

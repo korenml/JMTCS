@@ -1,0 +1,11 @@
+7 UO2 1
+pin_R2A4Ax25/constant/fuel/volPower
+-10.14 900
+5 3 3 2 1
+pin_R2A4Ax25/constant/fuel/polyMesh/points
+pin_R2A4Ax25/constant/fuel/polyMesh/faces
+pin_R2A4Ax25/constant/fuel/polyMesh/owner
+pin_R2A4Ax25/constant/fuel/polyMesh/neighbour
+-1
+pin_R2A4Ax25/TIME/fuel/T 1
+pin_R2A4Ax25/constant/fuel/mapping.dat

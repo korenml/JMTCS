@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2206                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.2;
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//matchTolerance  0.001;
+
+pointSync       true;
+
+patches
+(
+	{
+		name walls;
+		patchInfo
+        { 
+			type symmetry;
+		}
+		constructFrom patches;
+		patches (defaultFaces);
+	}
+	
+	{
+		name coolant_to_cladding;
+		patchInfo
+		{
+			type            mappedWall;
+    	    sampleMode      nearestPatchFace;
+    	    sampleRegion    cladding;
+	        samplePatch     cladding_to_coolant;
+        }
+   		constructFrom patches;
+		patches (coolant_to_cladding_);
+	}
+
+);

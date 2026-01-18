@@ -1,0 +1,22 @@
+set terminal wxt enhanced
+set logscale y
+set title "OpenFOAM residual"
+set ylabel 'Residual'
+set xlabel 'Iteration'
+
+set grid
+
+plot x notitle with line linecolor rgb"#ffffff",\
+"< cat log | grep 'Solving for Ux' | cut -d' ' -f9 | tr -d ','" title 'Ux' with lines,\
+"< cat log | grep 'Solving for Uy' | cut -d' ' -f9 | tr -d ','" title 'Uy' with lines,\
+"< cat log | grep 'Solving for Uz' | cut -d' ' -f9 | tr -d ','" title 'Uz' with lines,\
+"< cat log | grep 'Solving for h' | cut -d ' ' -f9 | sed -n '1~3'p |tr -d ','" title 'h_{coolant}' with lines, \
+"< cat log | grep 'Solving for p_rgh' | cut -d' ' -f9 | sed -n '1~2'p | tr -d  ','" title 'p' with lines, \
+"< cat log | grep 'Solving for omega' | cut -d' ' -f9 |  tr -d  ','" title 'omega' with lines, \
+"< cat log | grep 'Solving for k' | cut -d' ' -f9 |  tr -d  ','" title 'k' with lines, \
+"< cat log | grep 'Solving for h' | cut -d ' ' -f9 | sed -n '2~3'p |tr -d ','" dt 2 title 'h_{fuel}' with lines, \
+"< cat log | grep 'Solving for h' | cut -d ' ' -f9 | sed -n '3~3'p |tr -d ','" dt 3 title 'h_{cladding}' with lines
+
+pause 1
+reread
+

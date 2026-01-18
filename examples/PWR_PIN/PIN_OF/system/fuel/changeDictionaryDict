@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+T
+{
+	internalField   uniform 900;
+
+	boundaryField
+	{
+		zmax
+		{
+			type	zeroGradient;
+		}
+
+		zmin
+		{
+			type	zeroGradient;
+
+		}
+		
+		fuel_to_cladding
+		{
+		    type            compressible::turbulentTemperatureCoupledBaffleMixed;
+            Tnbr            T;
+            thicknessLayers (3.6e-5);
+            kappaLayers		(1);
+            kappaMethod     solidThermo;
+            value           $internalField;
+		}
+
+	}
+
+}
+
+
+p
+{
+	internalField   uniform 1e5;
+
+	boundaryField
+	{
+		zmax
+		{
+			
+		    type	fixedFluxPressure;
+			value	$internalField;
+	
+		}
+
+		zmin
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+		
+		fuel_to_cladding
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+	}
+
+}
+
+
+// ************************************************************************* //

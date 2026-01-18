@@ -1,0 +1,11 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "/home/tomas/OpenFOAM/tomas-v2106/run/AP-1000/pin_meshWR_test/constant/fuel";
+    object      volPower;
+}
+
+dimensions      [1 -1 -3 0 0 0 0];
+

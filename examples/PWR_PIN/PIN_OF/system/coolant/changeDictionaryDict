@@ -1,0 +1,288 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+U
+{
+    internalField   uniform (0 0 4.7);
+
+	boundaryField
+	{
+		zmax
+		{
+			type	pressureInletOutletVelocity;
+			value	uniform (0 0 4.7);
+		}
+		
+
+		zmin
+		{
+			type	fixedValue;
+			value	uniform (0 0 4.7);
+		}
+		
+
+		coolant_to_cladding
+		{
+			type	noSlip;
+		}
+		
+		walls
+		{
+			type	symmetry;
+		}
+
+	}
+}
+
+T
+{
+	internalField   uniform 552.5744;
+
+	boundaryField
+	{
+		zmax
+		{
+			type	zeroGradient;
+		}
+
+		zmin
+		{
+			type	fixedValue;
+			value	uniform 552.5744;
+		}
+
+		
+		coolant_to_cladding
+		{
+		    type            compressible::turbulentTemperatureCoupledBaffleMixed;
+            Tnbr            T;
+            kappaMethod     fluidThermo;
+            value           $internalField;
+		}
+		
+
+		walls
+		{
+			type	symmetry;
+		}
+
+	}
+
+}
+
+alphat
+{
+	internalField   uniform 0;
+
+	boundaryField
+	{
+		
+		zmax
+		{
+		     type    calculated;
+		     value   $internalField;
+		}
+
+		zmin
+		{
+			 type    calculated;
+		     value   $internalField;
+		}
+
+		coolant_to_cladding
+		{
+			type            compressible::alphatJayatillekeWallFunction;
+		    value           uniform 0;
+		    Prt             0.85;
+		}
+		
+		
+		walls
+		{
+			type            symmetry;
+		}
+
+	}
+}
+
+nut
+{
+	internalField   uniform 0;
+
+	boundaryField
+	{
+
+		zmax
+		{
+		     type    calculated;
+		     value   $internalField;		
+		}
+
+		zmin
+		{
+			 type    calculated;
+		     value   $internalField;
+		}
+
+		coolant_to_cladding
+		{
+			type            nutUSpaldingWallFunction;
+		    value           uniform 0;
+		}
+		
+		walls
+		{
+			type            symmetry;
+		}
+	}
+
+}
+
+omega
+{
+	internalField   uniform 225;
+
+	boundaryField
+	{
+		zmin
+		{
+		     type    fixedValue;
+		     value   uniform 225;		
+		}
+
+		zmax
+		{
+			type            inletOutlet;
+		    value           uniform 225;
+		    inletValue      uniform 225;
+		}
+
+		coolant_to_cladding
+		{
+			type            omegaWallFunction;
+		    value           uniform 1e5;
+		}
+		
+		walls
+		{
+			type            symmetry;
+		}
+	}
+}
+
+k
+{
+    internalField   uniform 0.04;
+
+	boundaryField
+	{
+
+
+		zmin
+		{
+		     type    fixedValue;
+		     value   uniform 0.04;		
+		}
+
+		zmax
+		{
+			type            inletOutlet;
+		    value           uniform 0.04;
+		    inletValue      uniform 0.04;
+		}
+
+		coolant_to_cladding
+		{
+
+			type            fixedValue;
+		    value           uniform 1e-8;
+
+		}
+		
+		walls
+		{
+			type            symmetry;
+
+		}
+	}
+}
+
+p_rgh
+{
+	internalField   uniform 15.5132e6;
+
+	boundaryField
+	{
+		zmax
+		{
+		    type            prghTotalPressure;
+		    p0              uniform 15.5132e6;
+		}
+
+		zmin
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+
+		coolant_to_cladding
+		{
+			type	fixedFluxPressure;
+			value	$internalField;
+		}
+		
+		walls
+		{
+			type	symmetry;
+		}
+
+	}
+
+}
+
+p
+{
+    internalField   uniform 15.5132e6;
+
+	boundaryField
+	{
+
+		zmax
+		{
+		     type    calculated;
+		     value   $internalField;
+		}
+
+		zmin
+		{
+			 type    calculated;
+		     value   $internalField;
+		}
+
+		coolant_to_cladding
+		{
+			 type    calculated;
+		     value   $internalField;
+		}
+		
+		walls
+		{
+			type    symmetry;
+		}
+	}
+}
+
+// ************************************************************************* //

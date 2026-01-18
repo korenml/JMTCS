@@ -1,0 +1,103 @@
+% --- Coupled PWR pin for mapping tests
+
+set title "PWR pin Calculation"
+
+% --- Fuel pins:
+
+pin 10
+UO2     0.409575
+clad    0.47498
+water
+
+surf  ax1   pz      0.0
+surf  ax2   pz      426.72
+surf  1000  sqc		0.0 0.0 0.628492
+
+cell 110  0  fill 10    -1000  ax1 -ax2
+cell 112  0  outside     1000
+cell 113  0  water      -1000 -ax1
+cell 114  0  water      -1000  ax2
+
+mat UO2   -9.92492 %tmp 900
+92234.03c  9.1361E-06
+92235.03c  9.3472E-04
+92238.03c  2.1523E-02
+ 8016.03c  4.4935E-02
+ 
+mat clad  -6.55 tmp 650
+26000.06c  1.3225E-04
+24000.06c  6.7643E-05
+40000.06c  3.8310E-02
+
+mat water -7.2216E-01  moder lwtr 1001 %tmp 600
+ 1001.03c  4.8132E-02
+ 8016.03c  2.4066E-02
+ 5010.03c  3.6487E-06
+ 5011.03c  1.4686E-05
+
+%FIRST_STEP therm lwtr lwj3.11t
+%SECOND_STEP therm lwtr 0 lwj3.09t lwj3.11t lwj3.13t
+
+% --- Interface file
+
+ifc "fuel.ifc"
+ifc "water.ifc"
+
+% --- Thermal power
+
+set power 3.6e4
+
+% --- Cross section library file path:
+
+%set acelib "/xs/sss_endfb7u.xsdata"
+set acelib "/media/tomas/DISK2/Serpent_2/xsdata/sss_endfb7u.xsdata"
+
+set gcu -1
+
+% --- Periodic boundary condition:
+
+set bc 3
+
+% --- Neutron population and criticality cycles:
+
+%set pop 6000 500 20
+set pop NEUTRONS 50 20
+
+% --- Geometry and mesh plots:
+plot 2 500 500
+plot 3 500 500
+mesh 2 500 500
+mesh 3 500 500
+
+% --- Energy grid
+
+ene ene1 4 cas40
+
+% --- Detectors
+
+det 1 de ene1 dt -3
+
+% --- Detector that calculates the radial fission distribution in the fuel: 
+%     Name of the detector is RadialFission.
+%     The detector uses response number -6 (total fission cross section)
+%     of the material at the interaction site (keyword: void)
+%     Detector only scores interactions at material "fuel" ("dm fuel").
+%     Detector calculates the spatial distribution using a cylindrical mesh "dn 1"
+%     with 20 bins in the radial direction between 0.0 and 0.4025 cm ("0.0 0.4025 20")
+%     with 1 bin in the angular direction between 0 and 360 degrees ("0 360 1")
+%     with 1 bin in the axial direction that extends from -infinity to infinity ("0 0 1")
+
+det RadialFission dr -6 void dm UO2 dn 1 0.0 0.4025 20 0 360 1 0 242 1
+
+% --- Detector that calculates the radial capture distribution in the fuel:
+%     Name of the detector is RadialCapture.
+%     The detector uses response number -2 (total capture cross section)
+%     of the material at the interaction site (keyword: void)
+%     Detector only scores interactions at material "fuel" ("dm fuel").
+%     Detector calculates the spatial distribution using a cylindrical mesh "dn 1"
+%     with 20 bins in the radial direction between 0.0 and 0.4025 cm ("0.0 0.4025 20")
+%     with 1 bin in the angular direction between 0 and 360 degrees ("0 360 1")
+%     with 1 bin in the axial direction that extends from -infinity to infinity ("0 0 1")
+
+det RadialCapture dr -2 void dm UO2 dn 1 0.0 0.4025 20 0 360 1 0 242 1
+

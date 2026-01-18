@@ -1,0 +1,11 @@
+7 water 1
+pin_R2A4Ax25/constant/coolant/volPower
+-0.72216 300
+5 3 3 2 1
+pin_R2A4Ax25/constant/coolant/polyMesh/points
+pin_R2A4Ax25/constant/coolant/polyMesh/faces
+pin_R2A4Ax25/constant/coolant/polyMesh/owner
+pin_R2A4Ax25/constant/coolant/polyMesh/neighbour
+pin_R2A4Ax25/TIME/coolant/rho 1
+pin_R2A4Ax25/TIME/coolant/T 1
+-1 %pin_R2A4Ax25/constant/coolant/mapping.dat

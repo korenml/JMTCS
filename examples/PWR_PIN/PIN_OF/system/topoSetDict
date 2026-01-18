@@ -1,0 +1,140 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+
+    // Void - inner hole
+    {
+        name    voidCellSet;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+		p1		(0.0 0.0 0.4035);
+		p2		(0.0 0.0 2.8835);
+		radius	0.0007;
+
+    }
+    {
+        name    void;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     voidCellSet;
+    }
+
+    // Fuel
+    {
+        name    fuelCellSet;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+		p1		(0.0 0.0 0.4035);
+		p2		(0.0 0.0 2.8835);
+		radius	0.003785;
+		innerRadius 0.0007;
+    }
+    {
+        name    fuel;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     fuelCellSet;
+    }
+
+    // VoidFC - between fuel and cladding
+    {
+        name    voidFCCellSet;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+		p1		(0.0 0.0 0.4035);
+		p2		(0.0 0.0 2.8835);
+		radius	0.003945;
+		innerRadius 0.003785;
+    }
+    {
+        name    voidFC;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     voidFCCellSet;
+    }
+
+    // Cladding
+    {
+        name    claddingCellSet;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+		p1		(0.0 0.0 0.4035);
+		p2		(0.0 0.0 2.8835);
+		radius	0.004550;
+		innerRadius 0.003945;
+    }
+    {
+        name    cladding;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     claddingCellSet;
+    }
+
+    // Water is all the other cells
+
+    {
+        name    waterCellSet;
+        type    cellSet;
+        action  new;
+        source  cellToCell;
+        set     voidCellSet;
+    }
+    {
+        name    waterCellSet;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        set     fuelCellSet;
+    }
+    {
+        name    waterCellSet;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        set     voidFCCellSet;
+    }
+    {
+        name    waterCellSet;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        set     claddingCellSet;
+    }
+    {
+        name    waterCellSet;
+        type    cellSet;
+        action  invert;
+    }
+    {
+        name    water;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     waterCellSet;
+    }
+);
+

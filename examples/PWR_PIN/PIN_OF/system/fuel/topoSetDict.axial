@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+actions
+(
+	// pin: 0
+    {
+        name          fuel158Set;
+        type          cellSet;
+        action        new;
+        source        cylinderToCell;
+        p1            (0.0 0.0 0.0);
+        p2            (0.0 0.0 0.24321);
+        radius        5.5;
+        innerRadius   0.0;
+    }
+    
+    {
+        name    fuel158;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     fuel158Set;
+    }
+
+	// pin: 1
+    {
+        name          fuel340Set;
+        type          cellSet;
+        action        new;
+        source        cylinderToCell;
+        p1            (0.0 0.0 0.2432);
+        p2            (0.0 0.0 4.0641);
+        radius        5.5;
+        innerRadius   0.0;
+    }
+    
+    {
+        name    fuel340;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     fuel340Set;
+    }
+
+	// pin: 2
+    {
+        name          fuel158Set;
+        type          cellSet;
+        action        add;
+        source        cylinderToCell;
+        p1            (0.0 0.0 4.064);
+        p2            (0.0 0.0 4.2672);
+        radius        5.5;
+        innerRadius   0.0;
+    }
+    
+    {
+        name    fuel158;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        set     fuel158Set;
+    }
+
+);

@@ -1,0 +1,15 @@
+boundaryField
+{
+    zmax
+    {
+        type            zeroGradient;
+    }
+    zmin
+    {
+        type            zeroGradient;
+    }
+    fuel_to_cladding
+    {
+        type            zeroGradient;
+    }
+}

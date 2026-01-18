@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      setExprBoundaryFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+// Fuel volume 0.0002234424 m^3
+// Thermal power 80 kW
+// Heat flux 3.58e8
+
+
+expressions
+(
+	volPower
+    {
+        field       volPower;
+        dimensions  [1 -1 -3 0 0 0 0];
+        
+
+
+        expression #{ 3.0e8 + 0.58e8*cos(3.14*pos().z()/4.2672-3.14/2) #};
+        
+    }
+    
+    // These now done in 0/T (which is filled from 0/pattern_holder/prior_T)
+    /*
+    {
+        patch   SnoplusAV_intfc0p75_lid;
+        target  T; 
+        expression #{ (0.0) #};
+    }
+    
+    {
+        patch   SnoplusAV_intfc0p75_base;
+        target  T; 
+        expression #{ (pos().z() < 12.0 ? 0.0-(12.0-pos().z())*0.2 : 0.0) #};
+    }
+    */
+
+);
+
+
+
+// ************************************************************************* //
